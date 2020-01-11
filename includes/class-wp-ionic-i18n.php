@@ -24,7 +24,7 @@
  * @subpackage Wp_Ionic/includes
  * @author     Dimitriοs Mavroudis <im.dimitrismavroudis@gmail.com>
  */
-class Wp_Ionic_i18n {
+class Wp_Ionic_I18n {
 
 
 	/**

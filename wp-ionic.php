@@ -3,19 +3,14 @@
 /**
  * The plugin bootstrap file
  *
- * This file is read by WordPress to generate the plugin information in the plugin
- * admin area. This file also includes all of the dependencies used by the plugin,
- * registers the activation and deactivation functions, and defines a function
- * that starts the plugin.
- *
  * @link              https://mavrou.gr
  * @since             1.0.0
  * @package           Wp_Ionic
  *
  * @wordpress-plugin
- * Plugin Name:       WP Ionic Plugin
+ * Plugin Name:       WP Ionic
  * Plugin URI:        wp-ionic
- * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
+ * Description:       Integrate your WordPress Website with WP Ionic based Apps
  * Version:           1.0.0
  * Author:            Dimitriοs Mavroudis
  * Author URI:        https://mavrou.gr

@@ -55,25 +55,43 @@ class Wp_Ionic_Admin {
 	}
 
 	/**
+	 * Adds the option in WordPress Admin menu
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 */
+	public function options_page() {
+		add_options_page( __( 'WP Ionic', 'wp-ionic' ), __( 'WP Ionic', 'wp-ionic' ), 'manage_options', 'wp-ionic', array(
+			$this,
+			'options_page_content',
+		) );
+	}
+
+	/**
+	 * Adds the admin page content
+	 *
+	 * @since    1.0.0
+	 * @access   public
+	 */
+	public function options_page_content() {
+
+		include_once( 'partials/admin-display.php' );
+
+	}
+
+	/**
 	 * Register the stylesheets for the admin area.
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_styles() {
+	public function enqueue_styles( $hook ) {
 
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Wp_Ionic_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Wp_Ionic_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
+		if ( 'settings_page_wp-ionic' !== $hook ) {
+			return;
+		}
 
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/wp-ionic-admin.css', array(), $this->version, 'all' );
+		wp_enqueue_style( $this->plugin_name . '_select2', plugin_dir_url( __FILE__ ) . 'css/select2.min.css', array(), $this->version, 'all' );
 
 	}
 
@@ -82,21 +100,37 @@ class Wp_Ionic_Admin {
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_scripts() {
+	public function enqueue_scripts( $hook ) {
 
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Wp_Ionic_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Wp_Ionic_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
+		if ( 'settings_page_wp-ionic' !== $hook ) {
+			return;
+		}
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wp-ionic-admin.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( $this->plugin_name . '_select2', plugin_dir_url( __FILE__ ) . 'js/select2.min.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wp-ionic-admin.js', array( 'jquery', $this->plugin_name . '_select2' ), $this->version, true );
+	}
+
+	/**
+	 * Set custom links in plugins page
+	 *
+	 * @since    1.0.0
+	 *
+	 * @param   array $actions
+	 * @param   string $plugin_file
+	 *
+	 * @return  array    $actions
+	 */
+	public function action_links( $actions, $plugin_file ) {
+
+		if ( $plugin_file === $this->plugin_path ) {
+			$settings  = array(
+				'settings' => '<a href="' . esc_url( get_admin_url( null, 'options-general.php?page=wp-ionic' ) ) . '">' . __( 'Settings', 'wp-ionic' ) . '</a>',
+			);
+			$actions   = array_merge( $converter, $actions );
+			$actions   = array_merge( $settings, $actions );
+		}
+
+		return $actions;
 
 	}
 

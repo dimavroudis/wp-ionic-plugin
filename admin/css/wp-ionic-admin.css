@@ -2,3 +2,32 @@
  * All of the CSS for your admin-specific functionality should be
  * included in this file.
  */
+
+.select2-container {
+	min-width: 100%;
+}
+
+
+.form-group{
+	margin-bottom: 1.5em;
+	width: 100%;
+	max-width: 400px;
+}
+
+.form-group textarea,
+.form-group input:not([type="radio"]):not([type="checkbox"]) {
+	width: 100%;
+}
+
+.form-group label {
+	font-weight: 600;
+	line-height: 1.5;
+	padding-bottom: .5em;
+	display: block;
+}
+
+.form-group label .label-details {
+	display: block;
+	font-weight: 400;
+	font-style: italic;
+}

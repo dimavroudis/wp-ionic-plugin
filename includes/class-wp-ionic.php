@@ -77,7 +77,6 @@ class Wp_Ionic {
 		$this->load_dependencies();
 		$this->set_locale();
 		$this->define_admin_hooks();
-		$this->define_public_hooks();
 
 	}
 
@@ -116,12 +115,6 @@ class Wp_Ionic {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-wp-ionic-admin.php';
 
-		/**
-		 * The class responsible for defining all actions that occur in the public-facing
-		 * side of the site.
-		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-wp-ionic-public.php';
-
 		$this->loader = new Wp_Ionic_Loader();
 
 	}
@@ -129,7 +122,7 @@ class Wp_Ionic {
 	/**
 	 * Define the locale for this plugin for internationalization.
 	 *
-	 * Uses the Wp_Ionic_i18n class in order to set the domain and to register the hook
+	 * Uses the Wp_Ionic_I18n class in order to set the domain and to register the hook
 	 * with WordPress.
 	 *
 	 * @since    1.0.0
@@ -137,7 +130,7 @@ class Wp_Ionic {
 	 */
 	private function set_locale() {
 
-		$plugin_i18n = new Wp_Ionic_i18n();
+		$plugin_i18n = new Wp_Ionic_I18n();
 
 		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
 
@@ -157,21 +150,9 @@ class Wp_Ionic {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 
-	}
+		$this->loader->add_action( 'admin_menu', $plugin_admin, 'options_page' );
 
-	/**
-	 * Register all of the hooks related to the public-facing functionality
-	 * of the plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 */
-	private function define_public_hooks() {
-
-		$plugin_public = new Wp_Ionic_Public( $this->get_plugin_name(), $this->get_version() );
-
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+		$this->loader->add_filter( 'plugin_action_links', $plugin_admin, 'action_links', 10, 5 );
 
 	}
 
