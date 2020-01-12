@@ -1,16 +1,6 @@
 <?php
 
 /**
- * Register all actions and filters for the plugin
- *
- * @link       https://mavrou.gr
- * @since      1.0.0
- *
- * @package    Wp_Ionic
- * @subpackage Wp_Ionic/includes
- */
-
-/**
  * Register all actions and filters for the plugin.
  *
  * Maintain a list of all hooks that are registered throughout
@@ -19,7 +9,7 @@
  *
  * @package    Wp_Ionic
  * @subpackage Wp_Ionic/includes
- * @author     Dimitriοs Mavroudis <im.dimitrismavroudis@gmail.com>
+ * @author     Dimitriοs Mavroudis <im.dimitris.mavroudis@gmail.com>
  */
 class Wp_Ionic_Loader {
 

@@ -15,35 +15,34 @@
 if ( isset( $_POST['nonce_wp_ionic_submitSettings'] ) && wp_verify_nonce( $_POST['nonce_wp_ionic_submitSettings'], 'wp_ionic_submitSettings' ) ) {
 
 	$new_settings = array(
-		'home' => array(
-			'intro' => isset( $_POST['introHomeTab'] ) ? $_POST['introHomeTab'] : '',
+		'description' => isset( $_POST['introHomeTab'] ) ? $_POST['introHomeTab'] : '',
+		'homeTab' => array(
 			'featuredPosts' => isset( $_POST['featuredPosts'] ) ? $_POST['featuredPosts'] : [],
 		),
-		'more' => array(
+		'moreTab' => array(
 			'pages' => isset( $_POST['pagesMoreTab'] ) ? $_POST['pagesMoreTab'] : [],
 		),
-		'comments' => array(
-			'enabled' => isset( $_POST['enableComments'] ),
-		),
+		'comments' => isset( $_POST['enableComments'] ) ? 'enabled' : 'disabled',
 	);
 
-	update_option( 'wp_ionic_settings',  wp_json_encode( $new_settings ) );
+	$updated = update_option( 'wp_ionic_settings',  wp_json_encode( $new_settings ) );
 }
 
 
-$_settings = json_decode( get_option( 'wp_ionic_settings' ), true );
-$settings = array(
-	'home' => array(
-		'intro' => $_settings['home']['intro'],
-		'featuredPosts' => $_settings['home']['featuredPosts'],
-	),
-	'more' => array(
-		'pages' => $_settings['more']['pages'],
-	),
-	'comments' => array(
-		'enabled' => $_settings['comments']['enabled'],
-	),
-);
+$_settings = json_decode( get_option( 'wp_ionic_settings' ) );
+
+if ( $_settings ) {
+	$settings = array(
+		'description' => $_settings->description,
+		'homeTab' => array(
+			'featuredPosts' => $_settings->homeTab->featuredPosts,
+		),
+		'moreTab' => array(
+			'pages' => $_settings->moreTab->pages,
+		),
+		'comments' => $_settings->comments,
+	);
+}
 
 ?>
 <form action="<?php echo esc_attr( str_replace( '%7E', '~', $_SERVER['REQUEST_URI'] ) ); ?>" method="post">
@@ -62,7 +61,8 @@ $settings = array(
 			<label for="introHomeTab">
 				<?php esc_html_e( 'Into Text', 'wp-ionic' ); ?>
 			</label>
-			<textarea row="6" name="introHomeTab" id="introHomeTab"><?php echo esc_html( $settings['home']['intro'] ); ?></textarea>
+			<textarea row="6" name="introHomeTab"
+				id="introHomeTab"><?php echo esc_html( $settings['description'] ); ?></textarea>
 		</div>
 		<div class="form-group">
 			<label for="featuredPosts">
@@ -84,7 +84,7 @@ $settings = array(
 				);
 				foreach ( $posts as $post ) {
 					$selected = '';
-					foreach ( $settings['home']['featuredPosts'] as $selected_post ) {
+					foreach ( $settings['homeTab']['featuredPosts'] as $selected_post ) {
 						if ( $selected_post == $post->ID ) {
 							$selected = 'selected';
 						}
@@ -112,7 +112,7 @@ $settings = array(
 		<div class="form-group">
 			<label for="pagesMoreTab"><?php esc_html_e( 'Select pages for "More" tab', 'wp-ionic' ); ?></label>
 
-			<select title="<?php esc_attr_e( 'Select pages for "More" tab', 'wp-ionic' ); ?>" 
+			<select title="<?php esc_attr_e( 'Select pages for "More" tab', 'wp-ionic' ); ?>"
 				data-placeholder="<?php esc_attr_e( 'Start typing the title of a page', 'wp-ionic' ); ?>"
 				name="pagesMoreTab[]" class="select2" id="pagesMoreTab" multiple>
 
@@ -120,7 +120,7 @@ $settings = array(
 				$pages = get_pages();
 				foreach ( $pages as $page ) {
 					$selected = '';
-					foreach ( $settings['more']['pages'] as $selected_page ) {
+					foreach ( $settings['moreTab']['pages'] as $selected_page ) {
 						if ( $selected_page == $page->ID ) {
 							$selected = 'selected';
 						}
@@ -143,7 +143,7 @@ $settings = array(
 		<div class="form-group">
 			<label for="enableComments">
 				<input name="enableComments" id="enableComments" type="checkbox" value="enabled"
-					<?php echo $settings['comments']['enabled'] ? 'checked' : ''; ?>>
+					<?php echo 'enabled' === $settings['comments'] ? 'checked' : ''; ?>>
 				<?php esc_html_e( 'Enable anonymous Comments', 'wp-ionic' ); ?>
 			</label>
 		</div>

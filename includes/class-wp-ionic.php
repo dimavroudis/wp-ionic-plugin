@@ -1,19 +1,6 @@
 <?php
 
 /**
- * The file that defines the core plugin class
- *
- * A class definition that includes attributes and functions used across both the
- * public-facing side of the site and the admin area.
- *
- * @link       https://mavrou.gr
- * @since      1.0.0
- *
- * @package    Wp_Ionic
- * @subpackage Wp_Ionic/includes
- */
-
-/**
  * The core plugin class.
  *
  * This is used to define internationalization, admin-specific hooks, and
@@ -25,7 +12,7 @@
  * @since      1.0.0
  * @package    Wp_Ionic
  * @subpackage Wp_Ionic/includes
- * @author     Dimitriοs Mavroudis <im.dimitrismavroudis@gmail.com>
+ * @author     Dimitriοs Mavroudis <im.dimitris.mavroudis@gmail.com>
  */
 class Wp_Ionic {
 
@@ -77,6 +64,7 @@ class Wp_Ionic {
 		$this->load_dependencies();
 		$this->set_locale();
 		$this->define_admin_hooks();
+		$this->define_api_hooks();
 
 	}
 
@@ -114,6 +102,11 @@ class Wp_Ionic {
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-wp-ionic-admin.php';
+
+		/**
+		 * The class responsible for defining all api endpoints.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'api/class-wp-ionic-api.php';
 
 		$this->loader = new Wp_Ionic_Loader();
 
@@ -153,6 +146,26 @@ class Wp_Ionic {
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'options_page' );
 
 		$this->loader->add_filter( 'plugin_action_links', $plugin_admin, 'action_links', 10, 5 );
+
+	}
+
+	/**
+	 * Register all of the hooks related to the admin area functionality
+	 * of the plugin.
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 */
+	private function define_api_hooks() {
+
+		$plugin_api = new Wp_Ionic_Api( $this->get_plugin_name(), $this->get_version() );
+
+		$this->loader->add_action( 'rest_api_init', $plugin_api, 'register_routes' );
+
+		$_settings = json_decode( get_option( 'wp_ionic_settings' ) );
+		if ( $_settings && 'enabled' === $_settings->comments ) {
+			add_filter( 'rest_allow_anonymous_comments', '__return_true' );
+		}
 
 	}
 

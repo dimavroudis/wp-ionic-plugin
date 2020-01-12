@@ -1,19 +1,6 @@
 <?php
 
 /**
- * Define the internationalization functionality
- *
- * Loads and defines the internationalization files for this plugin
- * so that it is ready for translation.
- *
- * @link       https://mavrou.gr
- * @since      1.0.0
- *
- * @package    Wp_Ionic
- * @subpackage Wp_Ionic/includes
- */
-
-/**
  * Define the internationalization functionality.
  *
  * Loads and defines the internationalization files for this plugin
@@ -22,7 +9,7 @@
  * @since      1.0.0
  * @package    Wp_Ionic
  * @subpackage Wp_Ionic/includes
- * @author     Dimitriοs Mavroudis <im.dimitrismavroudis@gmail.com>
+ * @author     Dimitriοs Mavroudis <im.dimitris.mavroudis@gmail.com>
  */
 class Wp_Ionic_I18n {
 

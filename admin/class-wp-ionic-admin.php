@@ -3,22 +3,10 @@
 /**
  * The admin-specific functionality of the plugin.
  *
- * @link       https://mavrou.gr
  * @since      1.0.0
- *
  * @package    Wp_Ionic
  * @subpackage Wp_Ionic/admin
- */
-
-/**
- * The admin-specific functionality of the plugin.
- *
- * Defines the plugin name, version, and two examples hooks for how to
- * enqueue the admin-specific stylesheet and JavaScript.
- *
- * @package    Wp_Ionic
- * @subpackage Wp_Ionic/admin
- * @author     Dimitriοs Mavroudis <im.dimitrismavroudis@gmail.com>
+ * @author     Dimitriοs Mavroudis <im.dimitris.mavroudis@gmail.com>
  */
 class Wp_Ionic_Admin {
 
@@ -58,7 +46,7 @@ class Wp_Ionic_Admin {
 	 * Adds the option in WordPress Admin menu
 	 *
 	 * @since    1.0.0
-	 * @access   private
+	 * @access   public
 	 */
 	public function options_page() {
 		add_options_page( __( 'WP Ionic', 'wp-ionic' ), __( 'WP Ionic', 'wp-ionic' ), 'manage_options', 'wp-ionic', array(
