@@ -53,14 +53,14 @@ class Wp_Ionic {
 	 *
 	 * @since    1.0.0
 	 */
-	public function __construct() {
+	public function __construct( $plugin_path ) {
 		if ( defined( 'WP_IONIC_VERSION' ) ) {
 			$this->version = WP_IONIC_VERSION;
 		} else {
 			$this->version = '1.0.0';
 		}
 		$this->plugin_name = 'wp-ionic';
-
+		$this->plugin_path = $plugin_path;
 		$this->load_dependencies();
 		$this->set_locale();
 		$this->define_admin_hooks();
@@ -138,14 +138,17 @@ class Wp_Ionic {
 	 */
 	private function define_admin_hooks() {
 
-		$plugin_admin = new Wp_Ionic_Admin( $this->get_plugin_name(), $this->get_version() );
+		$plugin_admin = new Wp_Ionic_Admin( $this->get_plugin_name(), $this->get_version(), $this->get_plugin_path() );
+
+		$basename = plugin_basename( __FILE__ );
+		$prefix = is_network_admin() ? 'network_admin_' : '';
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'options_page' );
 
-		$this->loader->add_filter( 'plugin_action_links', $plugin_admin, 'action_links', 10, 5 );
+		$this->loader->add_filter( 'plugin_action_links' , $plugin_admin, 'action_links', 10, 5);
 
 	}
 
@@ -198,6 +201,17 @@ class Wp_Ionic {
 	public function get_loader() {
 		return $this->loader;
 	}
+
+		/**
+	 * Retrieve the plugin path of the plugin.
+	 *
+	 * @since     1.0.0
+	 * @return    string    The version number of the plugin.
+	 */
+	public function get_plugin_path() {
+		return $this->plugin_path;
+	}
+
 
 	/**
 	 * Retrieve the version number of the plugin.

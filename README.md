@@ -18,7 +18,8 @@ List of features:
 * Enable/Disable comments
 * Add/Remove pages at 'More' tab
 * Add/Remove featured post from 'Home' tab
-* Add custom text for intro at 'Home' tab
+* Add/Remove featured categories from 'News' tab
+* Add custom intro text at 'Home' tab
 
 ## Installation
 

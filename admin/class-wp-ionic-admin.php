@@ -35,10 +35,11 @@ class Wp_Ionic_Admin {
 	 * @param      string    $plugin_name       The name of this plugin.
 	 * @param      string    $version    The version of this plugin.
 	 */
-	public function __construct( $plugin_name, $version ) {
+	public function __construct( $plugin_name, $version, $plugin_path ) {
 
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
+		$this->plugin_path = $plugin_path;
 
 	}
 
@@ -109,12 +110,10 @@ class Wp_Ionic_Admin {
 	 * @return  array    $actions
 	 */
 	public function action_links( $actions, $plugin_file ) {
-
 		if ( $plugin_file === $this->plugin_path ) {
 			$settings  = array(
 				'settings' => '<a href="' . esc_url( get_admin_url( null, 'options-general.php?page=wp-ionic' ) ) . '">' . __( 'Settings', 'wp-ionic' ) . '</a>',
 			);
-			$actions   = array_merge( $converter, $actions );
 			$actions   = array_merge( $settings, $actions );
 		}
 

@@ -19,6 +19,9 @@ if ( isset( $_POST['nonce_wp_ionic_submitSettings'] ) && wp_verify_nonce( $_POST
 		'homeTab' => array(
 			'featuredPosts' => isset( $_POST['featuredPosts'] ) ? $_POST['featuredPosts'] : [],
 		),
+		'archive' => array(
+			'featuredCategories' => isset( $_POST['featuredCategories'] ) ? $_POST['featuredCategories'] : [],
+		),
 		'moreTab' => array(
 			'pages' => isset( $_POST['pagesMoreTab'] ) ? $_POST['pagesMoreTab'] : [],
 		),
@@ -37,6 +40,9 @@ if ( $_settings ) {
 		'homeTab' => array(
 			'featuredPosts' => $_settings->homeTab->featuredPosts,
 		),
+		'archive' => array(
+			'featuredCategories' => $_settings->archive->featuredCategories,
+		),
 		'moreTab' => array(
 			'pages' => $_settings->moreTab->pages,
 		),
@@ -51,7 +57,7 @@ if ( $_settings ) {
 
 	<fieldset>
 		<h2 class="title">
-			<?php esc_html_e( 'Home Tab Content', 'wp-ionic' ); ?>
+			<?php esc_html_e( 'Home Tab', 'wp-ionic' ); ?>
 		</h2>
 		<p>
 			<?php esc_html_e( 'Home tab is the default page when somebody launches the app.', 'wp-ionic' ); ?>
@@ -84,9 +90,11 @@ if ( $_settings ) {
 				);
 				foreach ( $posts as $post ) {
 					$selected = '';
-					foreach ( $settings['homeTab']['featuredPosts'] as $selected_post ) {
-						if ( $selected_post == $post->ID ) {
-							$selected = 'selected';
+					if ( count( $settings['homeTab']['featuredPosts'] ) > 0 ) {
+						foreach ( $settings['homeTab']['featuredPosts'] as $selected_post ) {
+							if ( $selected_post == $post->ID ) {
+								$selected = 'selected';
+							}
 						}
 					}
 
@@ -104,7 +112,7 @@ if ( $_settings ) {
 	<fieldset>
 
 		<h2 class="title">
-			<?php esc_html_e( 'More Tab Content', 'wp-ionic' ); ?>
+			<?php esc_html_e( 'More Tab', 'wp-ionic' ); ?>
 		</h2>
 		<p>
 			<?php esc_html_e( 'More Tab is the section of the app you can add list of pages like "About us", "Privacy Policy" etc.', 'wp-ionic' ); ?>
@@ -120,9 +128,11 @@ if ( $_settings ) {
 				$pages = get_pages();
 				foreach ( $pages as $page ) {
 					$selected = '';
-					foreach ( $settings['moreTab']['pages'] as $selected_page ) {
-						if ( $selected_page == $page->ID ) {
-							$selected = 'selected';
+					if ( count( $settings['moreTab']['pages'] ) > 0 ) {
+						foreach ( $settings['moreTab']['pages'] as $selected_page ) {
+							if ( $selected_page == $page->ID ) {
+								$selected = 'selected';
+							}
 						}
 					}
 					$option = '<option value="' . $page->ID . '" ' . $selected . '>';
@@ -136,6 +146,49 @@ if ( $_settings ) {
 		</div>
 
 	</fieldset>
+
+	<fieldset>
+
+		<h2 class="title">
+			<?php esc_html_e( 'News Tab', 'wp-ionic' ); ?>
+		</h2>
+		<div class="form-group">
+			<label for="featuredCategories">
+				<?php esc_html_e( 'Featured Categories', 'wp-ionic' ); ?>
+				<span class="label-details">
+					<?php esc_html_e( 'Leave empty if you want to display all the none-empty categories.', 'wp-ionic' ); ?>
+				</span>
+			</label>
+
+			<select title="<?php esc_attr_e( 'Select categories for "News" tab', 'wp-ionic' ); ?>"
+				data-placeholder="<?php esc_attr_e( 'Start typing the name of a category', 'wp-ionic' ); ?>"
+				name="featuredCategories[]" class="select2" id="featuredCategories" multiple>
+
+				<?php
+				$categories = get_terms( array(
+					'taxonomy' => 'category',
+				) );
+				foreach ( $categories as $category ) {
+					$selected = '';
+					if ( count( $settings['archive']['featuredCategories'] ) > 0 ) {
+						foreach ( $settings['archive']['featuredCategories'] as $selected_category ) {
+							if ( $selected_category == $category->term_id  ) {
+								$selected = 'selected';
+							}
+						}
+					}
+					$option = '<option value="' . $category->term_id  . '" ' . $selected . '>';
+					$option .= $category->name;
+					$option .= '</option>';
+					echo $option;
+				}
+				?>
+
+			</select>
+		</div>
+
+	</fieldset>
+
 	<fieldset>
 		<h2 class="title">
 			<?php esc_html_e( 'Comments', 'wp-ionic' ); ?>

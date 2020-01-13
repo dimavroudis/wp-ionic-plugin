@@ -68,7 +68,8 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-wp-ionic.php';
  */
 function run_wp_ionic() {
 
-	$plugin = new Wp_Ionic();
+	$plugin_path = plugin_basename( __FILE__ );
+	$plugin = new Wp_Ionic( $plugin_path );
 	$plugin->run();
 
 }
