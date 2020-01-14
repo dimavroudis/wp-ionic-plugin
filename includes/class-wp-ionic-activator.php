@@ -30,7 +30,7 @@ class Wp_Ionic_Activator {
 			),
 			'moreTab' => array(
 				'pages' => array(),
-				'links' -> array(),
+				'links' => array(),
 			),
 			'comments' => false,
 		);
