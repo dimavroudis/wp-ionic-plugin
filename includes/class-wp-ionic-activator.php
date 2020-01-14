@@ -20,7 +20,7 @@ class Wp_Ionic_Activator {
 	 * @since    1.0.0
 	 */
 	public static function activate() {
-		$settings  = get_options( 'wp_ionic_settings' );
+		$settings  = get_option( 'wp_ionic_settings' );
 		if(!$settings){
 			$settings = array(
 				'description' => '',
