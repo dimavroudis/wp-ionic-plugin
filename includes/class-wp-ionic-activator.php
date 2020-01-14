@@ -20,7 +20,22 @@ class Wp_Ionic_Activator {
 	 * @since    1.0.0
 	 */
 	public static function activate() {
+		$settings = array(
+			'description' => '$_settings->description',
+			'homeTab' => array(
+				'featuredPosts' => array(),
+			),
+			'archive' => array(
+				'featuredCategories' => array(),
+			),
+			'moreTab' => array(
+				'pages' => array(),
+				'links' -> array(),
+			),
+			'comments' => false,
+		);
 
+		update_option( 'wp_ionic_settings',  wp_json_encode( $settings ) );
 	}
 
 }

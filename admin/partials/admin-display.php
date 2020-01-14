@@ -14,6 +14,18 @@
 
 if ( isset( $_POST['nonce_wp_ionic_submitSettings'] ) && wp_verify_nonce( $_POST['nonce_wp_ionic_submitSettings'], 'wp_ionic_submitSettings' ) ) {
 
+	$more_links = array();
+
+	if ( isset( $_POST['more_link'] ) ) {
+		$count_links = intval( $_POST['more_link'] );
+		for ( $i = 0; $i < $count_links; $i++ ) {
+			$index = $i + 1;
+			$more_links[ $i ]['label'] = isset( $_POST[ 'more_link_' . $index . '_label' ] ) ? $_POST[ 'more_link_' . $index . '_label' ] : '';
+			$more_links[ $i ]['url'] = isset( $_POST[ 'more_link_' . $index . '_url' ] ) ? $_POST[ 'more_link_' . $index . '_url' ] : '';
+			$more_links[ $i ]['icon'] = isset( $_POST[ 'more_link_' . $index . '_icon' ] ) ? $_POST[ 'more_link_' . $index . '_icon' ] : '';
+		}
+	}
+
 	$new_settings = array(
 		'description' => isset( $_POST['introHomeTab'] ) ? $_POST['introHomeTab'] : '',
 		'homeTab' => array(
@@ -24,6 +36,7 @@ if ( isset( $_POST['nonce_wp_ionic_submitSettings'] ) && wp_verify_nonce( $_POST
 		),
 		'moreTab' => array(
 			'pages' => isset( $_POST['pagesMoreTab'] ) ? $_POST['pagesMoreTab'] : [],
+			'links' => $more_links,
 		),
 		'comments' => isset( $_POST['enableComments'] ) ? 'enabled' : 'disabled',
 	);
@@ -45,6 +58,7 @@ if ( $_settings ) {
 		),
 		'moreTab' => array(
 			'pages' => $_settings->moreTab->pages,
+			'links' => $_settings->moreTab->links,
 		),
 		'comments' => $_settings->comments,
 	);
@@ -112,13 +126,14 @@ if ( $_settings ) {
 	<fieldset>
 
 		<h2 class="title">
-			<?php esc_html_e( 'More Tab', 'wp-ionic' ); ?>
+			<?php esc_html_e( 'More Tab Pages', 'wp-ionic' ); ?>
 		</h2>
 		<p>
-			<?php esc_html_e( 'More Tab is the section of the app you can add list of pages like "About us", "Privacy Policy" etc.', 'wp-ionic' ); ?>
+			<?php esc_html_e( 'You can add pages to your app link Privacy and Policy, About Us etc, though the More tab.', 'wp-ionic' ); ?>
 		</p>
 		<div class="form-group">
-			<label for="pagesMoreTab"><?php esc_html_e( 'Select pages for "More" tab', 'wp-ionic' ); ?></label>
+			<label
+				for="pagesMoreTab"><?php esc_html_e( 'Select pages that will be visible "More" tab', 'wp-ionic' ); ?></label>
 
 			<select title="<?php esc_attr_e( 'Select pages for "More" tab', 'wp-ionic' ); ?>"
 				data-placeholder="<?php esc_attr_e( 'Start typing the title of a page', 'wp-ionic' ); ?>"
@@ -143,6 +158,49 @@ if ( $_settings ) {
 				?>
 
 			</select>
+		</div>
+
+	</fieldset>
+	<fieldset>
+		<h2 class="title">
+			<?php esc_html_e( 'Social Media', 'wp-ionic' ); ?>
+		</h2>
+		<div class="form-group">
+			<h3><?php esc_html_e( 'Select links that will be visible "More" tab', 'wp-ionic' ); ?></h3>
+			<span class="label-details">
+				<?php _e( 'Choose your icon from <a href="https://ionicons.com/">ionicons.com</a>. Clink the icon you want and copy the name from the <i>WEB COMPONENT CODE</i>. For example, for facebook <code>&lt;ion-icon name=&quot;logo-facebook&quot;&gt;&lt;/ion-icon&gt;</code> the name is <code>logo-facebook</code>. ', 'wp-ionic' ); ?>
+			</span>
+			<div class="repeater" data-name="more_link">
+				<input type="hidden" class="repeater-count" name="more_link"
+					value="<?php echo count( $settings['moreTab']['links'] ); ?>" />
+				<?php foreach ( $settings['moreTab']['links'] as $key => $value ) : ?>
+				<div class="repeater-group" id="more_link_<?php echo $key + 1; ?>">
+					<button type="button" id="remove_more_link_<?php echo $key + 1; ?>"
+						class="remove_repeater_group"><?php esc_html_e( 'Remove link', 'wp-ionic' ); ?></button>
+					<div class="repeater-input">
+						<label
+							for="more_link_<?php echo $key + 1; ?>_label"><?php esc_html_e( 'Link Label', 'wp-ionic' ); ?></label>
+						<input type="text" name="more_link_<?php echo $key + 1; ?>_label"
+							value="<?php echo $value->label; ?>" required/>
+					</div>
+					<div class="repeater-input">
+						<label
+							for="more_link_<?php echo $key + 1; ?>_url"><?php esc_html_e( 'Link Url', 'wp-ionic' ); ?></label>
+						<input type="url" name="more_link_<?php echo $key + 1; ?>_url" value="<?php echo $value->url; ?>" required/>
+					</div>
+					<div class="repeater-input">
+						<label for="more_link_<?php echo $key + 1; ?>_icon">
+							<?php esc_html_e( 'Link Icon', 'wp-ionic' ); ?>
+						</label>
+						<input type="text" name="more_link_<?php echo $key + 1; ?>_icon"
+							value="<?php echo $value->icon; ?>" required/>
+					</div>
+				</div>
+				<?php endforeach; ?>
+				<button type="button" id="add_more_link"
+					class="button button-primary add_repeater_group"><?php esc_html_e( 'Add link', 'wp-ionic' ); ?></button>
+			</div>
+
 		</div>
 
 	</fieldset>
@@ -172,12 +230,12 @@ if ( $_settings ) {
 					$selected = '';
 					if ( count( $settings['archive']['featuredCategories'] ) > 0 ) {
 						foreach ( $settings['archive']['featuredCategories'] as $selected_category ) {
-							if ( $selected_category == $category->term_id  ) {
+							if ( $selected_category == $category->term_id ) {
 								$selected = 'selected';
 							}
 						}
 					}
-					$option = '<option value="' . $category->term_id  . '" ' . $selected . '>';
+					$option = '<option value="' . $category->term_id . '" ' . $selected . '>';
 					$option .= $category->name;
 					$option .= '</option>';
 					echo $option;

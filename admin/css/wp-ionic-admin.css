@@ -8,7 +8,7 @@
 }
 
 
-.form-group{
+.form-group {
 	margin-bottom: 1.5em;
 	width: 100%;
 	max-width: 400px;
@@ -19,7 +19,8 @@
 	width: 100%;
 }
 
-.form-group label {
+.form-group label,
+fieldset h3 {
 	font-weight: 600;
 	line-height: 1.5;
 	padding-bottom: .5em;
@@ -30,4 +31,24 @@
 	display: block;
 	font-weight: 400;
 	font-style: italic;
+}
+
+.repeater-group {
+	position:relative;
+	padding-top: 1.5em;
+	padding-bottom: 1.5em;
+}
+
+.repeater-group:not(:last-of-type) {
+	border-bottom: 1px solid #7e8993;
+}
+
+.remove_repeater_group {
+    position: absolute;
+    top: 5px;
+    right: 0;
+    background: transparent;
+    border: 0;
+    padding: 0;
+    color: #0071a1;
 }
