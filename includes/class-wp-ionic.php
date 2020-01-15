@@ -148,7 +148,7 @@ class Wp_Ionic {
 
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'options_page' );
 
-		$this->loader->add_filter( 'plugin_action_links' , $plugin_admin, 'action_links', 10, 5);
+		$this->loader->add_filter( 'plugin_action_links' , $plugin_admin, 'action_links', 10, 5 );
 
 	}
 

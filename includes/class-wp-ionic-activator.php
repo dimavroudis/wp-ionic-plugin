@@ -21,20 +21,14 @@ class Wp_Ionic_Activator {
 	 */
 	public static function activate() {
 		$settings  = get_option( 'wp_ionic_settings' );
-		if(!$settings){
+		if ( ! $settings ) {
 			$settings = array(
 				'description' => '',
-				'homeTab' => array(
-					'featuredPosts' => array(),
-				),
-				'archive' => array(
-					'featuredCategories' => array(),
-				),
-				'moreTab' => array(
-					'pages' => array(),
-					'links' => array(),
-				),
-				'comments' => false,
+				'featuredPosts' => [],
+				'featuredCategories' => [],
+				'featuredPages' => [],
+				'links' => [],
+				'comments' => true,
 			);
 
 			update_option( 'wp_ionic_settings',  wp_json_encode( $settings ) );

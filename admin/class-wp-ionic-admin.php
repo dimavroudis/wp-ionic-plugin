@@ -69,6 +69,53 @@ class Wp_Ionic_Admin {
 	}
 
 	/**
+	 * Save plugin settings
+	 *
+	 * @since    1.0.0
+	 * @access   public
+	 */
+	private function save_settings() {
+
+		if ( isset( $_POST['nonce_wp_ionic_submitSettings'] ) && wp_verify_nonce( $_POST['nonce_wp_ionic_submitSettings'], 'wp_ionic_submitSettings' ) ) {
+
+			$more_links = array();
+		
+			if ( isset( $_POST['more_link'] ) && $_POST['more_link'] !== '' ) {
+				$links_indexes = explode( ',', $_POST['more_link'] );
+				foreach ( $links_indexes as $i => $index ) {
+					$more_links[ $i ]['label'] = isset( $_POST[ 'more_link_' . $index . '_label' ] ) ? sanitize_text_field( $_POST[ 'more_link_' . $index . '_label' ] ) : '';
+					$more_links[ $i ]['url'] = isset( $_POST[ 'more_link_' . $index . '_url' ] ) ? sanitize_text_field( $_POST[ 'more_link_' . $index . '_url' ] ) : '';
+					$more_links[ $i ]['icon'] = isset( $_POST[ 'more_link_' . $index . '_icon' ] ) ? sanitize_text_field( $_POST[ 'more_link_' . $index . '_icon' ] ) : '';
+				}
+			}
+		
+			$new_settings = array(
+				'description' => isset( $_POST['description'] ) ? sanitize_text_field( $_POST['description'] ) : '',
+				'featured_posts' => isset( $_POST['featured_posts'] ) ? $_POST['featured_posts'] : [],
+				'featured_categories' => isset( $_POST['featured_categories'] ) ? $_POST['featured_categories'] : [],
+				'featured_pages' => isset( $_POST['featured_pages'] ) ? $_POST['featured_pages'] : [],
+				'links' => $more_links,
+				'comments' => isset( $_POST['comments'] ) ? 'enabled' : 'disabled',
+			);
+		
+			$updated = update_option( 'wp_ionic_settings',  wp_json_encode( $new_settings ) );
+		}
+		
+
+	}
+
+	/**
+	 * Get plugin settings
+	 *
+	 * @since    1.0.0
+	 * @access   public
+	 */
+	private function get_settings() {
+		return json_decode( get_option( 'wp_ionic_settings' ), true );
+	}
+
+
+	/**
 	 * Register the stylesheets for the admin area.
 	 *
 	 * @since    1.0.0

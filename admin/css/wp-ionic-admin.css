@@ -11,7 +11,7 @@
 .form-group {
 	margin-bottom: 1.5em;
 	width: 100%;
-	max-width: 400px;
+	max-width: 600px;
 }
 
 .form-group textarea,
@@ -20,11 +20,17 @@
 }
 
 .form-group label,
-fieldset h3 {
+fieldset .label {
+	font-size: 13px;
 	font-weight: 600;
 	line-height: 1.5;
 	padding-bottom: .5em;
 	display: block;
+}
+
+fieldset .label{
+	margin-bottom: 0;
+	padding-bottom: 0;
 }
 
 .form-group label .label-details {
@@ -37,10 +43,17 @@ fieldset h3 {
 	position:relative;
 	padding-top: 1.5em;
 	padding-bottom: 1.5em;
+	margin-left: -10px;
 }
 
 .repeater-group:not(:last-of-type) {
 	border-bottom: 1px solid #7e8993;
+}
+
+.repeater-input{
+	width: 100%;
+	padding-left: 10px;
+	margin-bottom: 5px;
 }
 
 .remove_repeater_group {
@@ -51,4 +64,19 @@ fieldset h3 {
     border: 0;
     padding: 0;
     color: #0071a1;
+}
+
+.add_repeater_group.button {
+    margin-top: 10px;
+}
+
+[data-name="more_link"].repeater .repeater-group{
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
+}
+
+[data-name="more_link"].repeater .repeater-group > .repeater-input:not(:last-child){
+	width: calc(50% - 10px);
+	flex-grow: 1;
 }
