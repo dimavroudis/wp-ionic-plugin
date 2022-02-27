@@ -11,7 +11,8 @@
  * @subpackage Wp_Ionic/includes
  * @author     Dimitriοs Mavroudis <im.dimitris.mavroudis@gmail.com>
  */
-class Wp_Ionic_I18n {
+class Wp_Ionic_I18n
+{
 
 
 	/**
@@ -19,16 +20,13 @@ class Wp_Ionic_I18n {
 	 *
 	 * @since    1.0.0
 	 */
-	public function load_plugin_textdomain() {
+	public function load_plugin_textdomain()
+	{
 
 		load_plugin_textdomain(
 			'wp-ionic',
 			false,
-			dirname( dirname( plugin_basename( __FILE__ ) ) ) . '/languages/'
+			dirname(dirname(plugin_basename(__FILE__))) . '/languages/'
 		);
-
 	}
-
-
-
 }

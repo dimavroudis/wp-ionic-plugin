@@ -10,7 +10,8 @@
  * @subpackage Wp_Ionic/includes
  * @author     Dimitriοs Mavroudis <im.dimitris.mavroudis@gmail.com>
  */
-class Wp_Ionic_Activator {
+class Wp_Ionic_Activator
+{
 
 	/**
 	 * Short Description. (use period)
@@ -19,9 +20,10 @@ class Wp_Ionic_Activator {
 	 *
 	 * @since    1.0.0
 	 */
-	public static function activate() {
-		$settings  = get_option( 'wp_ionic_settings' );
-		if ( ! $settings ) {
+	public static function activate()
+	{
+		$settings  = get_option('wp_ionic_settings');
+		if (!$settings) {
 			$settings = array(
 				'description' => '',
 				'featuredPosts' => [],
@@ -31,8 +33,7 @@ class Wp_Ionic_Activator {
 				'comments' => true,
 			);
 
-			update_option( 'wp_ionic_settings',  wp_json_encode( $settings ) );
+			update_option('wp_ionic_settings',  wp_json_encode($settings));
 		}
 	}
-
 }

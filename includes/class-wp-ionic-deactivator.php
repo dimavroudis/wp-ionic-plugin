@@ -10,7 +10,8 @@
  * @subpackage Wp_Ionic/includes
  * @author     Dimitriοs Mavroudis <im.dimitris.mavroudis@gmail.com>
  */
-class Wp_Ionic_Deactivator {
+class Wp_Ionic_Deactivator
+{
 
 	/**
 	 * Short Description. (use period)
@@ -19,8 +20,7 @@ class Wp_Ionic_Deactivator {
 	 *
 	 * @since    1.0.0
 	 */
-	public static function deactivate() {
-
+	public static function deactivate()
+	{
 	}
-
 }

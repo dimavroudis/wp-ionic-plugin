@@ -14,7 +14,8 @@
  * @subpackage Wp_Ionic/includes
  * @author     Dimitriοs Mavroudis <im.dimitris.mavroudis@gmail.com>
  */
-class Wp_Ionic {
+class Wp_Ionic
+{
 
 	/**
 	 * The loader that's responsible for maintaining and registering all hooks that power
@@ -53,19 +54,15 @@ class Wp_Ionic {
 	 *
 	 * @since    1.0.0
 	 */
-	public function __construct( $plugin_path ) {
-		if ( defined( 'WP_IONIC_VERSION' ) ) {
-			$this->version = WP_IONIC_VERSION;
-		} else {
-			$this->version = '1.0.0';
-		}
+	public function __construct($plugin_path)
+	{
+		$this->version = defined('WP_IONIC_VERSION') ? WP_IONIC_VERSION :  '1.0.0';
 		$this->plugin_name = 'wp-ionic';
 		$this->plugin_path = $plugin_path;
 		$this->load_dependencies();
 		$this->set_locale();
 		$this->define_admin_hooks();
 		$this->define_api_hooks();
-
 	}
 
 	/**
@@ -84,32 +81,32 @@ class Wp_Ionic {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function load_dependencies() {
+	private function load_dependencies()
+	{
 
 		/**
 		 * The class responsible for orchestrating the actions and filters of the
 		 * core plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wp-ionic-loader.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-wp-ionic-loader.php';
 
 		/**
 		 * The class responsible for defining internationalization functionality
 		 * of the plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wp-ionic-i18n.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-wp-ionic-i18n.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-wp-ionic-admin.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-wp-ionic-admin.php';
 
 		/**
 		 * The class responsible for defining all api endpoints.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'api/class-wp-ionic-api.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'api/class-wp-ionic-api.php';
 
 		$this->loader = new Wp_Ionic_Loader();
-
 	}
 
 	/**
@@ -121,12 +118,12 @@ class Wp_Ionic {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function set_locale() {
+	private function set_locale()
+	{
 
 		$plugin_i18n = new Wp_Ionic_I18n();
 
-		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
-
+		$this->loader->add_action('plugins_loaded', $plugin_i18n, 'load_plugin_textdomain');
 	}
 
 	/**
@@ -136,20 +133,20 @@ class Wp_Ionic {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function define_admin_hooks() {
+	private function define_admin_hooks()
+	{
 
-		$plugin_admin = new Wp_Ionic_Admin( $this->get_plugin_name(), $this->get_version(), $this->get_plugin_path() );
+		$plugin_admin = new Wp_Ionic_Admin($this->get_plugin_name(), $this->get_version(), $this->get_plugin_path());
 
-		$basename = plugin_basename( __FILE__ );
+		$basename = plugin_basename(__FILE__);
 		$prefix = is_network_admin() ? 'network_admin_' : '';
 
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
+		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
 
-		$this->loader->add_action( 'admin_menu', $plugin_admin, 'options_page' );
+		$this->loader->add_action('admin_menu', $plugin_admin, 'options_page');
 
-		$this->loader->add_filter( 'plugin_action_links' , $plugin_admin, 'action_links', 10, 5 );
-
+		$this->loader->add_filter('plugin_action_links', $plugin_admin, 'action_links', 10, 5);
 	}
 
 	/**
@@ -159,17 +156,17 @@ class Wp_Ionic {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function define_api_hooks() {
+	private function define_api_hooks()
+	{
 
-		$plugin_api = new Wp_Ionic_Api( $this->get_plugin_name(), $this->get_version() );
+		$plugin_api = new Wp_Ionic_Api();
 
-		$this->loader->add_action( 'rest_api_init', $plugin_api, 'register_routes' );
+		$this->loader->add_action('rest_api_init', $plugin_api, 'register_routes');
 
-		$_settings = json_decode( get_option( 'wp_ionic_settings' ) );
-		if ( $_settings && 'enabled' === $_settings->comments ) {
-			add_filter( 'rest_allow_anonymous_comments', '__return_true' );
+		$_settings = json_decode(get_option('wp_ionic_settings'));
+		if ($_settings && 'enabled' === $_settings->comments) {
+			add_filter('rest_allow_anonymous_comments', '__return_true');
 		}
-
 	}
 
 	/**
@@ -177,7 +174,8 @@ class Wp_Ionic {
 	 *
 	 * @since    1.0.0
 	 */
-	public function run() {
+	public function run()
+	{
 		$this->loader->run();
 	}
 
@@ -188,7 +186,8 @@ class Wp_Ionic {
 	 * @since     1.0.0
 	 * @return    string    The name of the plugin.
 	 */
-	public function get_plugin_name() {
+	public function get_plugin_name()
+	{
 		return $this->plugin_name;
 	}
 
@@ -198,17 +197,19 @@ class Wp_Ionic {
 	 * @since     1.0.0
 	 * @return    Wp_Ionic_Loader    Orchestrates the hooks of the plugin.
 	 */
-	public function get_loader() {
+	public function get_loader()
+	{
 		return $this->loader;
 	}
 
-		/**
+	/**
 	 * Retrieve the plugin path of the plugin.
 	 *
 	 * @since     1.0.0
 	 * @return    string    The version number of the plugin.
 	 */
-	public function get_plugin_path() {
+	public function get_plugin_path()
+	{
 		return $this->plugin_path;
 	}
 
@@ -219,8 +220,8 @@ class Wp_Ionic {
 	 * @since     1.0.0
 	 * @return    string    The version number of the plugin.
 	 */
-	public function get_version() {
+	public function get_version()
+	{
 		return $this->version;
 	}
-
 }
