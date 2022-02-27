@@ -87,12 +87,14 @@ $settings = $this->get_settings();
 
 				<?php
 				$pages = get_pages();
-				foreach ($pages as $page) {
-					$selected = '';
-					if (count($settings['featured_pages']) > 0) {
-						foreach ($settings['featured_pages'] as $selected_page) {
-							if ($selected_page == $page->ID) {
-								$selected = 'selected';
+				if (isset($settings['featured_pages'])) {
+					foreach ($pages as $page) {
+						$selected = '';
+						if (count($settings['featured_pages']) > 0) {
+							foreach ($settings['featured_pages'] as $selected_page) {
+								if ($selected_page == $page->ID) {
+									$selected = 'selected';
+								}
 							}
 						}
 					}

@@ -11,7 +11,7 @@
  * Plugin Name:       WP Ionic
  * Plugin URI:        wp-ionic
  * Description:       Integrate your WordPress Website with WP Ionic based Apps
- * Version:           1.0.1
+ * Version:           1.0.2
  * Author:            Dimitriοs Mavroudis
  * Author URI:        https://mavrou.gr
  * License:           GPL-2.0+
@@ -28,7 +28,7 @@ if (!defined('WPINC')) {
 /**
  * Current plugin version.
  */
-define('WP_IONIC_VERSION', '1.0.1');
+define('WP_IONIC_VERSION', '1.0.2');
 
 /**
  * The code that runs during plugin activation.
