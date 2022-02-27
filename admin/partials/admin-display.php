@@ -49,14 +49,13 @@ $settings = $this->get_settings();
 						'numberposts' => -1,
 					)
 				);
-				if (isset($settings['featured_posts'])) {
-					foreach ($posts as $post) {
-						$selected = '';
-						if (count($settings['featured_posts']) > 0) {
-							foreach ($settings['featured_posts'] as $selected_post) {
-								if ($selected_post == $post->ID) {
-									$selected = 'selected';
-								}
+				$featured_posts = $settings['featured_posts'] ?? array();
+				foreach ($posts as $post) :
+					$selected = '';
+					if (count($featured_posts) > 0) {
+						foreach ($featured_posts as $selected_post) {
+							if ($selected_post == $post->ID) {
+								$selected = 'selected';
 							}
 						}
 					}
@@ -64,7 +63,7 @@ $settings = $this->get_settings();
 					<option value="<?php echo esc_attr($post->ID); ?>" <?php echo esc_attr($selected); ?>>
 						<?php echo esc_html($post->post_title); ?>
 					</option>
-				<?php } ?>
+				<?php endforeach; ?>
 
 			</select>
 		</div>
@@ -87,14 +86,13 @@ $settings = $this->get_settings();
 
 				<?php
 				$pages = get_pages();
-				if (isset($settings['featured_pages'])) {
-					foreach ($pages as $page) {
-						$selected = '';
-						if (count($settings['featured_pages']) > 0) {
-							foreach ($settings['featured_pages'] as $selected_page) {
-								if ($selected_page == $page->ID) {
-									$selected = 'selected';
-								}
+				$featured_pages = $settings['featured_pages'] ?? array();
+				foreach ($pages as $page) :
+					$selected = '';
+					if (count($featured_pages) > 0) {
+						foreach ($featured_pages as $selected_page) {
+							if ($selected_page == $page->ID) {
+								$selected = 'selected';
 							}
 						}
 					}
@@ -102,7 +100,7 @@ $settings = $this->get_settings();
 					<option value="<?php echo esc_attr($page->ID); ?>" <?php echo esc_attr($selected); ?>>
 						<?php echo esc_html($page->post_title); ?>
 					</option>
-				<?php } ?>
+				<?php endforeach; ?>
 
 			</select>
 		</div>
@@ -116,27 +114,29 @@ $settings = $this->get_settings();
 			</span>
 			<div class="repeater" data-name="more_link">
 				<?php
-				foreach ($settings['links'] as $key => $value) :
-					$keys[] = $key;
+				if (isset($settings['links'])) :
+					foreach ($settings['links'] as $key => $value) :
+						$keys[] = $key;
 				?>
-					<div class="repeater-group" id="'more_link_<?php echo esc_attr($key); ?>" data-index="<?php echo esc_attr($key); ?>">
-						<button type="button" id="remove_more_link_<?php echo esc_attr($key); ?>" class="remove_repeater_group"><?php esc_html_e('Remove link', 'wp-ionic'); ?></button>
-						<div class="repeater-input">
-							<label for="more_link_<?php echo esc_attr($key); ?>_label"><?php esc_html_e('Link Label', 'wp-ionic'); ?></label>
-							<input type="text" name="more_link_<?php echo esc_attr($key); ?>_label" id="more_link_<?php echo esc_attr($key); ?>_label" value="<?php echo esc_attr($value['label']); ?>" required />
+						<div class="repeater-group" id="'more_link_<?php echo esc_attr($key); ?>" data-index="<?php echo esc_attr($key); ?>">
+							<button type="button" id="remove_more_link_<?php echo esc_attr($key); ?>" class="remove_repeater_group"><?php esc_html_e('Remove link', 'wp-ionic'); ?></button>
+							<div class="repeater-input">
+								<label for="more_link_<?php echo esc_attr($key); ?>_label"><?php esc_html_e('Link Label', 'wp-ionic'); ?></label>
+								<input type="text" name="more_link_<?php echo esc_attr($key); ?>_label" id="more_link_<?php echo esc_attr($key); ?>_label" value="<?php echo esc_attr($value['label']); ?>" required />
+							</div>
+							<div class="repeater-input">
+								<label for="more_link_<?php echo esc_attr($key); ?>_icon">
+									<?php esc_html_e('Link Icon', 'wp-ionic'); ?>
+								</label>
+								<input type="text" name="more_link_<?php echo esc_attr($key); ?>_icon" id="more_link_<?php echo esc_attr($key); ?>_icon" value="<?php echo esc_attr($value['icon']); ?>" required />
+							</div>
+							<div class="repeater-input">
+								<label for="more_link_<?php echo esc_attr($key); ?>_url"><?php esc_html_e('Link Url', 'wp-ionic'); ?></label>
+								<input type="url" name="more_link_<?php echo esc_attr($key); ?>_url" id="more_link_<?php echo esc_attr($key); ?>_url" value="<?php echo esc_attr($value['url']); ?>" required />
+							</div>
 						</div>
-						<div class="repeater-input">
-							<label for="more_link_<?php echo esc_attr($key); ?>_icon">
-								<?php esc_html_e('Link Icon', 'wp-ionic'); ?>
-							</label>
-							<input type="text" name="more_link_<?php echo esc_attr($key); ?>_icon" id="more_link_<?php echo esc_attr($key); ?>_icon" value="<?php echo esc_attr($value['icon']); ?>" required />
-						</div>
-						<div class="repeater-input">
-							<label for="more_link_<?php echo esc_attr($key); ?>_url"><?php esc_html_e('Link Url', 'wp-ionic'); ?></label>
-							<input type="url" name="more_link_<?php echo esc_attr($key); ?>_url" id="more_link_<?php echo esc_attr($key); ?>_url" value="<?php echo esc_attr($value['url']); ?>" required />
-						</div>
-					</div>
-				<?php endforeach; ?>
+				<?php endforeach;
+				endif; ?>
 				<button type="button" id="add_more_link" class="button add_repeater_group"><?php esc_html_e('Add link', 'wp-ionic'); ?></button>
 				<input type="hidden" class="repeater-count" name="more_link" value="<?php echo esc_attr(isset($keys) ? implode(',', $keys) : ''); ?>" />
 			</div>
@@ -164,10 +164,11 @@ $settings = $this->get_settings();
 				$categories = get_terms(array(
 					'taxonomy' => 'category',
 				));
-				foreach ($categories as $category) {
+				$featured_categories = $settings['featured_categories'] ?? array();
+				foreach ($categories as $category) :
 					$selected = '';
-					if (count($settings['featured_categories']) > 0) {
-						foreach ($settings['featured_categories'] as $selected_category) {
+					if (count($featured_categories) > 0) {
+						foreach ($featured_categories as $selected_category) {
 							if ($selected_category == $category->term_id) {
 								$selected = 'selected';
 							}
@@ -177,7 +178,7 @@ $settings = $this->get_settings();
 					<option value="<?php echo esc_attr($category->term_id); ?>" <?php echo esc_attr($selected); ?>>
 						<?php echo esc_html($category->name); ?>
 					</option>
-				<?php } ?>
+				<?php endforeach; ?>
 
 			</select>
 		</div>
@@ -185,12 +186,13 @@ $settings = $this->get_settings();
 	</fieldset>
 
 	<fieldset>
+		<?php $comments = $settings['comments'] ?? false; ?>
 		<h2 class="title">
 			<?php esc_html_e('Comments', 'wp-ionic'); ?>
 		</h2>
 		<div class="form-group">
 			<label for="comments">
-				<input name="comments" id="comments" type="checkbox" value="enabled" <?php echo 'enabled' === $settings['comments'] ? 'checked' : ''; ?>>
+				<input name="comments" id="comments" type="checkbox" <?php checked($comments, 'enabled') ?> value="enabled">
 				<?php esc_html_e('Enable anonymous Comments', 'wp-ionic'); ?>
 			</label>
 		</div>
